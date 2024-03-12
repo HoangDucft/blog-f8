@@ -1,16 +1,12 @@
 class NewsController {
-
-    //index thường đặt là trang chủ
-
-    // [GET]/news
-    index (req, res) {
+    //[GET] /
+    index(req, res) {
         res.render('news');
     }
 
-    // [GET]/news/:slug
-    show (req, res) {
-        res.send("detail <3");
+    show(req, res) {
+        res.send('detail ....');
     }
 }
 
-module.exports = new NewsController;
+module.exports = new NewsController();
