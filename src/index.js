@@ -9,6 +9,8 @@ const { engine } = require('express-handlebars');
 const route = require('./routes');
 const db = require('./config/db');
 
+const methodOverride = require('method-override');
+
 const app = express();
 const port = 3000;
 
@@ -20,13 +22,24 @@ app.use(
         extended: true,
     }),
 );
+
+app.use(methodOverride('_method'));
+
 app.use(express.json());
 
 // HTTP logger
 app.use(morgan('combined'));
 
 //config name handlebars dictionary
-app.engine('.hbs', engine({ extname: '.hbs' }));
+app.engine(
+    '.hbs',
+    engine({
+        extname: '.hbs',
+        helpers: {
+            sum: (a, b) => a + b,
+        },
+    }),
+);
 
 // Template engine
 app.engine('handlebars', engine());

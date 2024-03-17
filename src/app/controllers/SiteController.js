@@ -17,7 +17,7 @@ class SiteController {
     }
 
     //[GET] / search
-    search(req, res) {
+    async search(req, res) {
         res.render('search');
     }
 }

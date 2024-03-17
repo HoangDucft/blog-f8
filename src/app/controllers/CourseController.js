@@ -15,18 +15,51 @@ class CourseController {
         }
     }
 
-    search(req, res, next) {
+    async create(req, res, next) {
         res.render('courses/create');
     }
 
-    store(req, res, next) {
-        const formData = req.body;
-        formData.image = `https://img.youtube.com/vi/${req.body.videoId}/sddefault.jpg`;
-        const course = new Course(formData);
-        course
-            .save()
-            .then(() => res.redirect('/'))
-            .catch((error) => {});
+    async store(req, res, next) {
+        try {
+            const formData = req.body;
+            formData.image = `https://img.youtube.com/vi/${req.body.videoId}/sddefault.jpg`;
+            const course = await new Course(formData);
+
+            // đối với phương thức post thì cần phải save lại để lưu
+            course.save();
+            res.redirect('/');
+        } catch (error) {
+            (error) => {
+                next(error);
+            };
+            res.status(400).json({ error: 'EROR !!!' });
+        }
+    }
+
+    async edit(req, res, next) {
+        try {
+            const course = await Course.findById(req.params.id);
+            res.render('../../resources/views/courses/edit.hbs', {
+                course: mongooseToObject(course),
+            });
+        } catch (error) {
+            (error) => {
+                next(error);
+            };
+            res.status(400).json({ error: 'EROR !!!' });
+        }
+    }
+
+    async update(req, res, next) {
+        try {
+            const course = await Course.updateOne({ _id: req.params.id }, req.body);
+            res.redirect('/me/stored/courses');
+        } catch (error) {
+            (error) => {
+                next(error);
+            };
+            res.status(400).json({ error: 'EROR !!!' });
+        }
     }
 }
 
