@@ -3,17 +3,16 @@ const { mongooseToObject, multipleMongooseToObject } = require('../../utils/mong
 class MeController {
     // [get] /me/stored/courses
     async storedCourses(req, res, next) {
-        try {
-            const courses = await Course.find({});
-            res.render('../../resources/views/me/storedCourses.hbs', {
-                courses: multipleMongooseToObject(courses),
-            });
-        } catch (error) {
-            (error) => {
+        Promise.all([Course.find({}), Course.countDocumentsWithDeleted({ deleted: true })])
+            .then(([courses, deletedCount]) => {
+                res.render('../../resources/views/me/storedCourses.hbs', {
+                    deletedCount,
+                    courses: multipleMongooseToObject(courses),
+                });
+            })
+            .catch((error) => {
                 next(error);
-            };
-            res.status(400).json({ error: 'EROR !!!' });
-        }
+            });
     }
 
     // [get] /me/trash/courses
