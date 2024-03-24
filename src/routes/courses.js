@@ -14,8 +14,15 @@ router.get('/:id/edit', courseController.edit);
 // [PUT] /course/:id
 router.put('/:id', courseController.update);
 
-// [DELETE] /course/:id
+// [DELETE] /course/:id  (soft delete)
 router.delete('/:id', courseController.delete);
+
+// [DELETE] /course/:id  (force delete)
+
+router.delete('/:id/force', courseController.forceDelete);
+
+// [PATCH] /course/:id/restore
+router.patch('/:id/restore', courseController.restore);
 
 // [GET] /course/:slug
 router.get('/:slug', courseController.show);

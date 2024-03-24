@@ -64,7 +64,31 @@ class CourseController {
 
     async delete(req, res, next) {
         try {
+            const course = await Course.delete({ _id: req.params.id });
+            res.redirect('back');
+        } catch (error) {
+            (error) => {
+                next(error);
+            };
+            res.status(400).json({ error: 'EROR !!!' });
+        }
+    }
+
+    async forceDelete(req, res, next) {
+        try {
             const course = await Course.deleteOne({ _id: req.params.id });
+            res.redirect('back');
+        } catch (error) {
+            (error) => {
+                next(error);
+            };
+            res.status(400).json({ error: 'EROR !!!' });
+        }
+    }
+
+    async restore(req, res, next) {
+        try {
+            const course = await Course.restore({ _id: req.params.id });
             res.redirect('back');
         } catch (error) {
             (error) => {
